@@ -6,7 +6,6 @@ import javax.swing.JOptionPane;
 
 import utils.FileUtils;
 import utils.States;
-import weka.classifiers.Classifier;
 import weka.classifiers.rules.JRip;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -38,7 +37,7 @@ public class Runner {
         
         dataProcessor.splitInstances(trainning, test, instances);
 
-        evaluate(test, trainning);
+        evaluate(instancesToClassify, trainning);
 
         JOptionPane.showMessageDialog(null, "zakończono");
     }
@@ -64,7 +63,7 @@ public class Runner {
 
         JRip jRip = new JRip();
 
-        for (int j = 495; j <= 505; j += 5) {
+        for (int j = 1200; j < 1205; j += 2) {
 
             for (int k = 0; k < training.numInstances(); k++) {
                 Instance instance = training.instance(k);
@@ -77,7 +76,7 @@ public class Runner {
 
             jRip = classificatorUtils.teachClassifier(jRip, training, j);
 
-//            setClasses(jRip, test);
+            setClasses(jRip, test);
             
             for (int i = 0; i < test.numInstances(); i++) {
                 double classification = jRip.classifyInstance(test.instance(i));
@@ -122,7 +121,7 @@ public class Runner {
         
         System.err.println("Najlepszy parametr : " + bestParameter + " Gini : " + gini);
         
-//        classifyAndSave(jRip, test);
+        classifyAndSave(jRip, test);
     }
 
     private static Instances setFilter(Instances test, Instances training, int percentage) throws Exception {
@@ -134,11 +133,11 @@ public class Runner {
         return training;
     }
 
-    public static void classifyAndSave(Classifier classifier, Instances test) throws Exception {
+    public static void classifyAndSave(JRip classifier, Instances test) throws Exception {
          FileUtils.saveLabeledInstanced(test);
     }
 
-    private void setClasses(Classifier classifier, Instances test) throws Exception {
+    private static void setClasses(JRip classifier, Instances test) throws Exception {
         for (int i = 0; i < test.numInstances(); i++) {
             Instance instance = test.instance(i);
 

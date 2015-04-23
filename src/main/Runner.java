@@ -31,13 +31,16 @@ public class Runner {
         Instances test = new Instances(instances, 0);
         Instances trainning = new Instances(instances, 0);
 
+        BufferedReader fileToClassify = FileUtils.loadFile(States.FILE_TO_CLASSIFY_PATH);
+        
+        Instances instancesToClassify = new Instances(fileToClassify);
+        instancesToClassify.setClassIndex(instancesToClassify.numAttributes() - 1);
+        
         dataProcessor.splitInstances(trainning, test, instances);
 
         evaluate(test, trainning);
 
         JOptionPane.showMessageDialog(null, "zakończono");
-        // TO_DO turn on in production
-        // classifyAndSave(jRip, test);
     }
 
     public static void evaluate(Instances test, Instances training) throws Exception {
@@ -61,7 +64,7 @@ public class Runner {
 
         JRip jRip = new JRip();
 
-        for (int j = 1400; j < 1500; j += 10) {
+        for (int j = 495; j <= 505; j += 5) {
 
             for (int k = 0; k < training.numInstances(); k++) {
                 Instance instance = training.instance(k);
@@ -74,6 +77,8 @@ public class Runner {
 
             jRip = classificatorUtils.teachClassifier(jRip, training, j);
 
+//            setClasses(jRip, test);
+            
             for (int i = 0; i < test.numInstances(); i++) {
                 double classification = jRip.classifyInstance(test.instance(i));
 
@@ -102,11 +107,6 @@ public class Runner {
                 bestParameter = j;
             }
 
-            // System.err.println("TruePossitive : " + truePositive);
-            // System.err.println("FalsePossitive : " + falsePositive);
-            // System.err.println("TrueNegative : " + trueNegative);
-            // System.err.println("FalseNegative : " + falseNegative);
-
             truePositive = 0;
             trueNegative = 0;
             falsePositive = 0;
@@ -115,7 +115,14 @@ public class Runner {
             weight++;
         }
 
+        System.err.println("TruePossitive : " + truePositive);
+        System.err.println("FalsePossitive : " + falsePositive);
+        System.err.println("TrueNegative : " + trueNegative);
+        System.err.println("FalseNegative : " + falseNegative);
+        
         System.err.println("Najlepszy parametr : " + bestParameter + " Gini : " + gini);
+        
+//        classifyAndSave(jRip, test);
     }
 
     private static Instances setFilter(Instances test, Instances training, int percentage) throws Exception {
@@ -128,6 +135,10 @@ public class Runner {
     }
 
     public static void classifyAndSave(Classifier classifier, Instances test) throws Exception {
+         FileUtils.saveLabeledInstanced(test);
+    }
+
+    private void setClasses(Classifier classifier, Instances test) throws Exception {
         for (int i = 0; i < test.numInstances(); i++) {
             Instance instance = test.instance(i);
 
@@ -135,7 +146,5 @@ public class Runner {
 
             instance.setClassValue(classyfication);
         }
-        // TO_DO turn on in production
-        // FileUtils.saveLabeledInstanced(test);
     }
 }

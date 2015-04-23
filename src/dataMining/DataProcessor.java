@@ -7,12 +7,12 @@ import weka.core.Instances;
 
 public class DataProcessor {
 
-    public static void splitInstances(Instances trainning, Instances test, Instances instances) {
+    public void splitInstances(Instances trainning, Instances test, Instances instances) {
         Random rand = new Random();
 
         for (int i = 0; i < instances.numInstances(); i++) {
             int value = rand.nextInt(100);
-            if (value <= 10) {
+            if (value <= 70) {
                 trainning.add(instances.instance(i));
             } else {
                 test.add(instances.instance(i));

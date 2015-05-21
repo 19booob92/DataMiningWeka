@@ -12,7 +12,7 @@ public class DataProcessor {
 
         for (int i = 0; i < instances.numInstances(); i++) {
             int value = rand.nextInt(100);
-            if (value <= 70) {
+            if (value <= 50) {
                 trainning.add(instances.instance(i));
             } else {
                 test.add(instances.instance(i));

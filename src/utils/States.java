@@ -7,5 +7,6 @@ public interface States {
 
     static final String OUTPUT_FILE_PATH = "/home/booob/Dokumenty/MGR_SEM_I/PrzetwarzanieDanych/out194225.arff";
 
-    static final String FILE_TO_CLASSIFY_PATH = "/home/booob/Dokumenty/MGR_SEM_I/PrzetwarzanieDanych/creditKaggleTestUN240415.arff";
+    static final String FILE_TO_CLASSIFY_PATH =
+            "/home/booob/Dokumenty/MGR_SEM_I/PrzetwarzanieDanych/creditKaggleTestUN150515.arff";
 }

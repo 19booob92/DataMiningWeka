@@ -19,7 +19,12 @@ public class Runner {
 
     private static ClassificatorUtils classificatorUtils = new ClassificatorUtils();
     private static DataProcessor dataProcessor = new DataProcessor();
-
+    
+    private static final int MIN = 1400;
+    private static final int DIFF = 10;
+    
+    private static final double WEIGHT_IMPROVE_RATIO = 4.56;
+    
     public static void main(String[] args) throws Exception {
 
         BufferedReader lines = FileUtils.loadFile(States.FILE_PATH);
@@ -44,10 +49,10 @@ public class Runner {
 
     public static void evaluate(Instances test, Instances training) throws Exception {
 
-        training = setFilter(test, training, 90);
+//        training = setFilter(test, training, 90);
 
         int progress = 0;
-        final int SUM_OF_INSTANCES = (test.numInstances() + training.numInstances()) * (4);
+        final int SUM_OF_INSTANCES = (test.numInstances() + training.numInstances()) * ((int) (DIFF / 2));
         
         int truePositive = 0;
         int trueNegative = 0;
@@ -66,7 +71,7 @@ public class Runner {
 
         JRip jRip = new JRip();
 
-        for (int j = 1250; j < 1256; j += 2) {
+        for (int j = MIN; j < MIN + DIFF; j += 2) {
 
             for (int k = 0; k < training.numInstances(); k++) {
                 Instance instance = training.instance(k);
@@ -113,7 +118,7 @@ public class Runner {
                 bestParameter = j;
             }
 
-            weight += 3;
+            weight += WEIGHT_IMPROVE_RATIO;
         }
 
         System.err.println("TruePossitive : " + truePositive);
@@ -131,8 +136,7 @@ public class Runner {
         smote.setPercentage(percentage);
         smote.setInputFormat(training);
 
-        training = Filter.useFilter(training, smote);
-        return training;
+        return Filter.useFilter(training, smote);
     }
 
     public static void classifyAndSave(JRip classifier, Instances test) throws Exception {

@@ -46,6 +46,9 @@ public class Runner {
 
         training = setFilter(test, training, 90);
 
+        int progress = 0;
+        final int SUM_OF_INSTANCES = (test.numInstances() + training.numInstances()) * (4);
+        
         int truePositive = 0;
         int trueNegative = 0;
         int falsePositive = 0;
@@ -63,7 +66,7 @@ public class Runner {
 
         JRip jRip = new JRip();
 
-        for (int j = 1200; j < 1205; j += 2) {
+        for (int j = 1250; j < 1256; j += 2) {
 
             for (int k = 0; k < training.numInstances(); k++) {
                 Instance instance = training.instance(k);
@@ -72,7 +75,9 @@ public class Runner {
                 if (classVal == 1.0) {
                     instance.setWeight(weight);
                 }
+                progress++;
             }
+            System.err.println(progress + " / " + SUM_OF_INSTANCES + "     " + ((double)progress / SUM_OF_INSTANCES)*100 + " %");
 
             jRip = classificatorUtils.teachClassifier(jRip, training, j);
 
@@ -94,7 +99,9 @@ public class Runner {
                         falseNegative++;
                     }
                 }
+                progress++;
             }
+            System.err.println(progress + " / " + SUM_OF_INSTANCES + "     " + ((double)progress / SUM_OF_INSTANCES)*100 + " %");
 
             trueNegativeRate = trueNegative * 100 / ((trueNegative + falsePositive) * 1.0);
             truePossitiveRate = truePositive * 100 / ((truePositive + falseNegative) * 1.0);
@@ -106,12 +113,7 @@ public class Runner {
                 bestParameter = j;
             }
 
-            truePositive = 0;
-            trueNegative = 0;
-            falsePositive = 0;
-            falseNegative = 0;
-
-            weight++;
+            weight += 3;
         }
 
         System.err.println("TruePossitive : " + truePositive);
@@ -119,7 +121,7 @@ public class Runner {
         System.err.println("TrueNegative : " + trueNegative);
         System.err.println("FalseNegative : " + falseNegative);
         
-        System.err.println("Najlepszy parametr : " + bestParameter + " Gini : " + gini);
+        System.err.println("Najlepszy parametr : " + bestParameter + " Gmean : " + gini);
         
         classifyAndSave(jRip, test);
     }

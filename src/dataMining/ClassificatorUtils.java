@@ -8,15 +8,14 @@ public class ClassificatorUtils {
 
     public JRip teachClassifier(JRip jrip, Instances training, int parameter) {
 
-        JRip jRip = jrip;
         try {
-            jRip.setSeed(parameter);
-            jRip.buildClassifier(training);
+            jrip.setSeed(parameter);
+            jrip.buildClassifier(training);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return jRip;
+        return jrip;
     }
 
 }

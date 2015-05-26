@@ -29,12 +29,12 @@ public class FileUtils {
 
     public static void saveLabeledInstanced(Instances labeled) throws IOException {
         BufferedWriter writer = new BufferedWriter(
-                new FileWriter(States.OUTPUT_FILE_PATH));
+                new FileWriter(States.OUTPUT_FILE_PATH_2));
         writer.write(labeled.toString());
         writer.newLine();
         writer.flush();
         writer.close();
-        
+
         JOptionPane.showMessageDialog(null, "Zapisano");
     }
 
